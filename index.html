@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FN Energy - Business Intelligence for Energy Markets</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuração do Tailwind para usar as fontes e cores do projeto -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#1e3a8a', // blue-900
+                            light: '#3b82f6', // blue-500
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Estilos adicionais para garantir consistência */
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-800 antialiased bg-gray-50">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent text-white">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 cursor-pointer group">
+                <div class="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:bg-blue-800 transition-colors">FN</div>
+                <span id="nav-logo-text" class="text-2xl font-bold tracking-tight transition-colors">
+                    FN Energy
+                </span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="nav-link text-sm font-medium hover:text-blue-400 transition-colors">Início</a>
+                <a href="#sobre" class="nav-link text-sm font-medium hover:text-blue-400 transition-colors">Sócios</a>
+                <a href="#servicos" class="nav-link text-sm font-medium hover:text-blue-400 transition-colors">Serviços</a>
+                <a href="#depoimentos" class="nav-link text-sm font-medium hover:text-blue-400 transition-colors">Depoimentos</a>
+                <a href="#contato" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-blue-500/30">
+                    Fale Conosco
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-btn" class="text-white focus:outline-none">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white shadow-xl py-6 px-6 flex flex-col space-y-4 border-t border-gray-100 md:hidden">
+            <a href="#home" class="mobile-link text-slate-700 font-medium py-2 border-b border-gray-50">Início</a>
+            <a href="#sobre" class="mobile-link text-slate-700 font-medium py-2 border-b border-gray-50">Sócios</a>
+            <a href="#servicos" class="mobile-link text-slate-700 font-medium py-2 border-b border-gray-50">Serviços</a>
+            <a href="#depoimentos" class="mobile-link text-slate-700 font-medium py-2 border-b border-gray-50">Depoimentos</a>
+            <a href="#contato" class="mobile-link text-blue-600 font-bold py-2">Fale Conosco</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-slate-900">
+        <!-- Abstract Background -->
+        <div class="absolute inset-0 z-0 opacity-40">
+           <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Energy Background" class="w-full h-full object-cover">
+           <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-blue-900/40"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 animate-fade-in-up">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                    <span class="text-blue-300 text-xs font-semibold tracking-wider uppercase">Business Intelligence</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight">
+                    Conectando <span class="text-blue-400">Negócios</span>,<br/>
+                    Unindo <span class="text-blue-400">Pessoas</span>.
+                </h1>
+                
+                <p class="text-xl text-slate-300 max-w-lg leading-relaxed">
+                    Consultoria independente especializada no setor de energia. Mais de <span class="text-white font-bold">R$ 3,6 bilhões</span> em contratos negociados e expertise técnica de ponta.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="#servicos" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 text-center">
+                        Nossas Soluções <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#sobre" class="bg-transparent border border-slate-600 hover:border-white text-white px-8 py-4 rounded-full font-semibold transition-all text-center">
+                        Conheça os Sócios
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Stats Floating Card (New) -->
+            <div class="hidden md:block relative animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl"></div>
+                <div class="glass-effect bg-white/10 backdrop-blur-md border border-white/10 p-8 rounded-2xl text-white max-w-sm ml-auto">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 bg-blue-600 rounded-lg">
+                            <i data-lucide="trending-up" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-blue-200">Track Record</p>
+                            <p class="text-2xl font-bold">R$ 3.6 Bilhões+</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                            <span>19+ Anos de Felipe Andreas</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                            <span>20+ Anos de Nacib Elias</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Expertise em M&A e O&M</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section (Redesigned for Profiles) -->
+    <section id="sobre" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Quem Somos</h2>
+                <h3 class="text-4xl font-bold text-slate-900 mb-4">Liderança com Autoridade no Mercado</h3>
+                <p class="text-slate-600 text-lg">
+                    A FN Energy BI nasceu da união de quase 40 anos de experiência combinada, integrando visão comercial agressiva e rigor técnico de engenharia.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Profile 1: Felipe Andreas -->
+                <div class="group relative bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-xl transition-all duration-300">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="briefcase" class="w-24 h-24 text-blue-900"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-20 h-20 rounded-full bg-blue-200 flex items-center justify-center overflow-hidden border-2 border-blue-600">
+                            <!-- Placeholder for Felipe's Image -->
+                             <span class="text-2xl font-bold text-blue-800">FA</span>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-bold text-slate-900">Felipe Andreas</h4>
+                            <p class="text-blue-600 font-medium">Co-Founder & CCO</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        Com mais de <strong>19 anos de experiência</strong>, Felipe é especialista em desenvolvimento de negócios e vendas de contratos de serviços de engenharia. Liderou negociações que somam mais de <strong>R$ 3,6 bilhões</strong> no setor elétrico, com atuação ativa em processos de M&A (sell-side) e gestão de Key Accounts.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Business Development</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">M&A</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Renováveis</span>
+                    </div>
+                    <a href="https://linkedin.com" target="_blank" class="inline-flex items-center gap-2 text-slate-500 hover:text-blue-700 transition-colors text-sm font-medium">
+                        <i data-lucide="linkedin" class="w-4 h-4"></i> Ver perfil completo
+                    </a>
+                </div>
+
+                <!-- Profile 2: Nacib Elias -->
+                <div class="group relative bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-xl transition-all duration-300">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="cpu" class="w-24 h-24 text-emerald-900"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-20 h-20 rounded-full bg-emerald-200 flex items-center justify-center overflow-hidden border-2 border-emerald-600">
+                             <!-- Placeholder for Nacib's Image -->
+                             <span class="text-2xl font-bold text-emerald-800">NE</span>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-bold text-slate-900">Nacib Elias</h4>
+                            <p class="text-emerald-600 font-medium">Co-Founder & Eng. Aplicação</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        Engenheiro com <strong>20 anos de setor</strong>, especialista em O&M e serviços técnicos. Liderou a implantação de Centros de Operação e modelagem econômica de ativos. Possui MBA em Gestão Empresarial pela FGV e vasta experiência em auditoria de estruturas e subestações.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">Engenharia O&M</span>
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">Centros de Operação</span>
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">MBA FGV</span>
+                    </div>
+                    <a href="https://linkedin.com" target="_blank" class="inline-flex items-center gap-2 text-slate-500 hover:text-blue-700 transition-colors text-sm font-medium">
+                        <i data-lucide="linkedin" class="w-4 h-4"></i> Ver perfil completo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section (Enhanced) -->
+    <section id="servicos" class="py-24 bg-slate-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">O Que Fazemos</h2>
+                <h3 class="text-4xl font-bold text-slate-900 mb-4">Soluções de Ponta a Ponta</h3>
+                <p class="text-slate-600 text-lg">
+                    Da prospecção estratégica à entrega técnica. Unimos o melhor dos dois mundos para acelerar seus resultados.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-slate-100 group flex flex-col">
+                    <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        <i data-lucide="bar-chart-3" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Desenvolvimento de Negócios</h4>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Gestão completa do ciclo comercial. Desde a prospecção greenfield até a negociação de grandes contratos (EPC/O&M) e suporte em processos de M&A (sell-side).
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-blue-500"></i> Gestão de Key Accounts</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-blue-500"></i> Negociações Bilionárias</li>
+                    </ul>
+                    <a href="#contato" class="text-blue-600 font-semibold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto">
+                        Saiba mais <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-slate-100 group flex flex-col">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                        <i data-lucide="settings" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Engenharia & O&M</h4>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Soluções técnicas especializadas. Modelagem econômica para projetos de O&M, implantação de Centros de Operação e auditoria de ativos de geração.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-emerald-500"></i> Arquitetura de Soluções</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-emerald-500"></i> Centros de Controle</li>
+                    </ul>
+                    <a href="#contato" class="text-emerald-600 font-semibold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto">
+                        Saiba mais <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-slate-100 group flex flex-col">
+                    <div class="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 mb-6 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                        <i data-lucide="zap" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Radar de Negócios</h4>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Detectamos oportunidades e gaps no mercado antes da concorrência. Monitoramento constante para capturar negócios em tempo real e conectar os players certos.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-amber-500"></i> Networking Estratégico</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-amber-500"></i> Market Intelligence</li>
+                    </ul>
+                    <a href="#contato" class="text-amber-600 font-semibold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto">
+                        Saiba mais <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Radar Highlight Section -->
+    <section class="py-20 bg-slate-900 text-white overflow-hidden relative">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-blue-900/20 transform skew-x-12 translate-x-20"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+                <div class="md:w-1/2">
+                    <h3 class="text-3xl md:text-4xl font-bold mb-6">Radar de Negócios</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed mb-8">
+                        "Detectar possíveis negócios e capturá-los em tempo."
+                    </p>
+                    <p class="text-slate-400 mb-8">
+                        Através do networking e mapeamento de mercado saber quando os negócios ocorrem, como ocorrem e quem são os players se faz fundamental para ter sucesso. Podemos ajudar a concretizar seu negócios e a detectar projetos invisíveis ao seu radar.
+                    </p>
+                    <a href="#contato" class="bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-blue-50 transition-colors inline-block">
+                        Ativar Radar
+                    </a>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative w-80 h-80">
+                        <div class="absolute inset-0 border-2 border-blue-500/30 rounded-full animate-ping"></div>
+                        <div class="absolute inset-4 border-2 border-blue-400/40 rounded-full"></div>
+                        <div class="absolute inset-12 border-2 border-blue-300/50 rounded-full"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="zap" class="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.8)]"></i>
+                        </div>
+                        <!-- Radar Dots -->
+                        <div class="absolute top-10 right-20 w-3 h-3 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#34d399]"></div>
+                        <div class="absolute bottom-20 left-10 w-3 h-3 bg-amber-400 rounded-full animate-pulse delay-700 shadow-[0_0_10px_#fbbf24]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="depoimentos" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Depoimentos</h2>
+                <h3 class="text-4xl font-bold text-slate-900">O Que Dizem Nossos Parceiros</h3>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+                    <i data-lucide="quote" class="text-blue-200 mb-4 w-10 h-10"></i>
+                    <p class="text-slate-700 italic mb-6 leading-relaxed">"Nacib, sempre o chamei de prof. Nacib... Um profissional fantástico, daqueles que sempre tem algo a nos acrescentar. Excelente pessoa, carismática e um profissionalismo exemplar."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg">G</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Geraldo Rocha</h4>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide">Parceiro de Negócios</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+                    <i data-lucide="quote" class="text-blue-200 mb-4 w-10 h-10"></i>
+                    <p class="text-slate-700 italic mb-6 leading-relaxed">"Felipe Andreas é um excelente profissional, refinado e focado, com imenso conhecimento e relacionamento no meio Energético. Tive um grande prazer em trabalharmos juntos em vários projetos."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg">R</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Ronaldo Villas Lemos</h4>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide">Executivo do Setor</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+                    <i data-lucide="quote" class="text-blue-200 mb-4 w-10 h-10"></i>
+                    <p class="text-slate-700 italic mb-6 leading-relaxed">"Tive a imensa satisfação em conhecer o Nacib há cerca de 4 anos. Competente e com um ótimo relacionamento interpessoal com parceiros e clientes."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg">T</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Thales Fonseca</h4>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide">Consultor</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+                    <i data-lucide="quote" class="text-blue-200 mb-4 w-10 h-10"></i>
+                    <p class="text-slate-700 italic mb-6 leading-relaxed">"Felipe Andreas é um profissional raríssimo. Arrojado, motivado, persuasivo, versátil e seguro. É uma referência no setor de O&M de ativos de geração."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg">N</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Nélio Ceribelli</h4>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide">Engenheiro</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contato" class="py-24 bg-blue-900 text-white relative">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">Fale Conosco</h2>
+                    <h3 class="text-4xl font-bold mb-6">Vamos Conversar?</h3>
+                    <p class="text-blue-100 text-lg mb-12">
+                        Você tem um desafio particular com o qual está tentando lidar? Entre em contato comigo hoje mesmo e veja o que posso fazer por você.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center shrink-0">
+                                <i data-lucide="map-pin" class="text-blue-300 w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Endereço</h4>
+                                <p class="text-blue-200">Rua Joe Collaço, 605, Sala 1<br/>Santa Mônica, Florianópolis - SC</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center shrink-0">
+                                <i data-lucide="phone" class="text-blue-300 w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Telefone</h4>
+                                <p class="text-blue-200">+55 48 991 074 553</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center shrink-0">
+                                <i data-lucide="mail" class="text-blue-300 w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Email</h4>
+                                <p class="text-blue-200">comercial@fn-ebi.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 mt-12">
+                        <a href="#" class="w-10 h-10 rounded-full border border-blue-700 flex items-center justify-center hover:bg-blue-800 transition-colors">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-blue-700 flex items-center justify-center hover:bg-blue-800 transition-colors">
+                            <i data-lucide="facebook" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-blue-700 flex items-center justify-center hover:bg-blue-800 transition-colors">
+                            <i data-lucide="twitter" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-2xl text-slate-800">
+                    <h4 class="text-2xl font-bold mb-6">Envie uma mensagem</h4>
+                    <form class="space-y-4" onsubmit="event.preventDefault(); alert('Mensagem enviada (demo)!');">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Nome</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="Seu nome">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                            <input type="email" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="seu@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Assunto</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="Como podemos ajudar?">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Mensagem</label>
+                            <textarea rows="4" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all resize-none" placeholder="Digite sua mensagem aqui..."></textarea>
+                        </div>
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition-colors shadow-lg hover:shadow-blue-500/30">
+                            Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-8 text-center text-slate-500 text-sm">
+        <div class="container mx-auto px-6">
+            <p>&copy; <span id="year"></span> FN Energy. Business Intelligence for Energy Markets.</p>
+            <p class="mt-2">Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Script de Funcionalidades (JavaScript Puro) -->
+    <script>
+        // Inicializar ícones Lucide
+        lucide.createIcons();
+
+        // Atualizar ano no rodapé
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Menu Mobile Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        const menuIcon = menuBtn.querySelector('i');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            // Opcional: mudar ícone para 'x' quando aberto (requer lógica extra de ícone, mas o toggle simples funciona bem)
+        });
+
+        // Fechar menu ao clicar em um link
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        const navLogoText = document.getElementById('nav-logo-text');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-white', 'shadow-md', 'py-4');
+                navbar.classList.remove('bg-transparent', 'py-6', 'text-white');
+                navbar.classList.add('text-slate-800');
+                
+                navLogoText.classList.replace('text-white', 'text-blue-900');
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('text-slate-200', 'hover:text-blue-500');
+                    link.classList.add('text-slate-600', 'hover:text-blue-600');
+                });
+
+                mobileMenuBtn.classList.remove('text-white');
+                mobileMenuBtn.classList.add('text-slate-800');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-md', 'py-4', 'text-slate-800');
+                navbar.classList.add('bg-transparent', 'py-6', 'text-white');
+                
+                navLogoText.classList.replace('text-blue-900', 'text-white');
+                
+                navLinks.forEach(link => {
+                    link.classList.add('text-slate-200');
+                    link.classList.remove('text-slate-600', 'hover:text-blue-600');
+                });
+
+                mobileMenuBtn.classList.add('text-white');
+                mobileMenuBtn.classList.remove('text-slate-800');
+            }
+        });
+    </script>
+</body>
+</html>
