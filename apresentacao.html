@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposta FN Energy - Marketing e BI</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#1e3a8a', // blue-900 (Main)
+                            light: '#3b82f6', // blue-500 (Highlights)
+                            accent: '#60a5fa', // blue-400
+                            dark: '#0f172a', // slate-950
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            /* Prevent native scrolling */
+            background-color: #0f172a;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Slide Container */
+        .slide-container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.95) translateY(20px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+            z-index: 10;
+        }
+
+        .slide.prev {
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: visible;
+            z-index: 5;
+        }
+
+        .slide.next {
+            transform: translateY(100%);
+            opacity: 0;
+            visibility: visible;
+            z-index: 5;
+        }
+
+        /* Staggered Animation Delays for Children */
+        .slide.active .animate-child {
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+            /* Star hidden */
+        }
+
+        .slide.active .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .slide.active .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .slide.active .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .slide.active .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        .slide.active .delay-5 {
+            animation-delay: 0.5s;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            transition: width 0.4s ease;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800">
+
+    <!-- Background Elements (Global) -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <!-- Abstract Shapes -->
+        <div
+            class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-blue-600/20 rounded-full blur-[100px] animate-float">
+        </div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-indigo-600/10 rounded-full blur-[120px] animate-float"
+            style="animation-delay: -3s;"></div>
+        <div class="absolute top-[20%] right-[30%] w-[20vw] h-[20vw] bg-cyan-400/10 rounded-full blur-[80px]"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="deck" class="slide-container relative z-10">
+
+        <!-- SLIDE 1: CAPA -->
+        <div class="slide" data-index="0">
+            <div
+                class="glass-dark text-white p-12 md:p-24 rounded-3xl shadow-2xl max-w-6xl w-full h-[85vh] flex flex-col justify-center relative overflow-hidden border border-white/10">
+                <!-- Decorative Grid -->
+                <div class="absolute inset-0 opacity-20"
+                    style="background-image: radial-gradient(#60a5fa 1px, transparent 1px); background-size: 32px 32px;">
+                </div>
+
+                <div class="relative z-10">
+                    <div
+                        class="inline-block px-4 py-2 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 font-semibold text-sm mb-6 animate-child delay-1">
+                        CONFIDENCIAL
+                    </div>
+                    <h1 class="text-5xl md:text-8xl font-black mb-6 leading-tight animate-child delay-2">
+                        PROPOSTA<br>
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">ESTRATÉGICA</span>
+                    </h1>
+                    <h2 class="text-2xl md:text-4xl font-light text-slate-300 mb-12 animate-child delay-3">
+                        Marketing Digital & Business Intelligence
+                    </h2>
+
+                    <div
+                        class="mt-auto border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-end gap-6 animate-child delay-4">
+                        <div>
+                            <p class="font-bold text-xl uppercase tracking-wider">FN Energy</p>
+                            <p class="text-blue-400 text-sm">Business Intelligence for Energy Markets</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-slate-400 text-sm">Dezembro / 2025</p>
+                            <p class="text-xs text-slate-600 mt-1">Use as setas ou deslize para navegar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: O DESAFIO -->
+        <div class="slide" data-index="1">
+            <div
+                class="glass-card p-10 md:p-16 rounded-3xl w-full max-w-6xl h-auto min-h-[70vh] flex flex-col transition-all">
+                <header class="mb-10 animate-child delay-1">
+                    <span class="text-blue-600 font-bold tracking-widest uppercase text-sm">01. Contexto</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mt-2">De Expertise a Ativo Digital</h2>
+                </header>
+
+                <div class="grid md:grid-cols-2 gap-12 flex-grow items-center">
+                    <div class="space-y-6 animate-child delay-2">
+                        <div class="bg-red-50 p-6 rounded-xl border-l-4 border-red-500">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="zap" class="text-red-500"></i>
+                                <h3 class="font-bold text-red-900">O Desafio</h3>
+                            </div>
+                            <p class="text-slate-700">
+                                Transformar 40 anos de expertise e <strong>R$ 3,6 Bilhões</strong> em track record numa
+                                presença digital que reflete essa grandiosidade, sem depender apenas do "boca a boca".
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 animate-child delay-3">
+                        <div class="bg-emerald-50 p-6 rounded-xl border-l-4 border-emerald-500">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="trending-up" class="text-emerald-500"></i>
+                                <h3 class="font-bold text-emerald-900">A Oportunidade (BI)</h3>
+                            </div>
+                            <p class="text-slate-700">
+                                Posicionar a FN Energy não apenas como consultoria, mas como <strong>HUB de Inteligência
+                                    (BI)</strong>. O site se torna uma fonte de dados e insights que atrai grandes
+                                players organicamente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: ESTRATÉGIA -->
+        <div class="slide" data-index="2">
+            <div class="glass-card p-8 md:p-12 rounded-3xl w-full max-w-7xl h-[90vh] flex flex-col">
+                <header class="mb-8 text-center animate-child delay-1">
+                    <span class="text-blue-600 font-bold tracking-widest uppercase text-sm">02. Solução</span>
+                    <h2 class="text-4xl font-bold text-slate-900">Ecossistema de Autoridade</h2>
+                </header>
+
+                <div class="flex-grow flex items-center justify-center relative animate-child delay-2">
+                    <!-- Diagrama CSS Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+
+                        <!-- Coluna 1: Input -->
+                        <div class="space-y-4 flex flex-col justify-center">
+                            <div
+                                class="bg-slate-800 text-white p-6 rounded-2xl shadow-lg transform hover:-translate-y-1 transition text-center">
+                                <i data-lucide="brain" class="w-8 h-8 mx-auto mb-3 text-blue-400"></i>
+                                <h4 class="font-bold">Expertise Sócios</h4>
+                                <p class="text-xs text-slate-400">Conhecimento Tácito</p>
+                            </div>
+                            <div class="flex justify-center"><i data-lucide="arrow-down" class="text-slate-400"></i>
+                            </div>
+                            <div
+                                class="bg-blue-600 text-white p-6 rounded-2xl shadow-lg transform hover:-translate-y-1 transition text-center">
+                                <i data-lucide="mic" class="w-8 h-8 mx-auto mb-3 text-white"></i>
+                                <h4 class="font-bold">Captação Multi</h4>
+                                <p class="text-xs text-blue-200">Podcast / Vídeo</p>
+                            </div>
+                        </div>
+
+                        <!-- Seta Meio -->
+                        <div class="hidden md:flex items-center justify-center">
+                            <i data-lucide="arrow-right" class="w-12 h-12 text-blue-300"></i>
+                        </div>
+
+                        <!-- Coluna 2: Hub & Dist -->
+                        <div class="space-y-4 flex flex-col justify-center">
+                            <div class="bg-white border-2 border-blue-100 p-6 rounded-2xl shadow-xl z-20 relative">
+                                <div
+                                    class="absolute -top-3 -right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                    SEO</div>
+                                <i data-lucide="globe" class="w-8 h-8 mx-auto mb-3 text-blue-600"></i>
+                                <h4 class="font-bold text-center text-slate-800">Website (HUB)</h4>
+                                <p class="text-xs text-center text-slate-500">Artigos, Dados, Transcrições</p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 mt-2">
+                                <div class="bg-blue-50 p-3 rounded-lg text-center border border-blue-100">
+                                    <i data-lucide="linkedin" class="w-5 h-5 mx-auto text-blue-700 mb-1"></i>
+                                    <span class="text-xs font-bold text-blue-900">LinkedIn</span>
+                                </div>
+                                <div class="bg-pink-50 p-3 rounded-lg text-center border border-pink-100">
+                                    <i data-lucide="instagram" class="w-5 h-5 mx-auto text-pink-600 mb-1"></i>
+                                    <span class="text-xs font-bold text-pink-900">Cortes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: INVESTIMENTO FIXO -->
+        <div class="slide" data-index="3">
+            <div
+                class="glass-card p-10 md:p-14 rounded-3xl w-full max-w-4xl text-slate-800 shadow-2xl flex flex-col justify-center h-auto min-h-[70vh]">
+                <header class="mb-8 text-center animate-child delay-1">
+                    <span class="text-blue-600 font-bold tracking-widest uppercase text-sm">03. Setup Inicial</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mt-2">Implementação Web</h2>
+                    <p class="text-slate-500 mt-2">Pacote Único de Estruturação</p>
+                </header>
+
+                <div class="space-y-6 animate-child delay-2 flex-grow flex flex-col justify-center">
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-blue-50/50 border border-blue-100">
+                        <div
+                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0 text-blue-600">
+                            <i data-lucide="layout"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900">Hotsite de Alta Performance</h4>
+                            <p class="text-slate-600 text-sm">Refinamento completo, SEO técnico, Mobile First e
+                                velocidade máxima.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-blue-50/50 border border-blue-100">
+                        <div
+                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0 text-blue-600">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900">Área de Insights (Blog/CMS)</h4>
+                            <p class="text-slate-600 text-sm">Estrutura para publicar artigos e transcrições para
+                                rankeamento no Google.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-blue-50/50 border border-blue-100">
+                        <div
+                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0 text-blue-600">
+                            <i data-lucide="database"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900">Estrutura de BI</h4>
+                            <p class="text-slate-600 text-sm">Preparo técnico para integração de Dashboards futuros.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-8 border-t border-slate-200 text-center animate-child delay-3">
+                    <p class="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-1">Investimento Único
+                    </p>
+                    <div class="flex justify-center items-baseline gap-2 text-brand-blue">
+                        <span class="text-2xl font-bold">R$</span>
+                        <span class="text-6xl font-black">5.500</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: RECORRÊNCIA -->
+        <div class="slide" data-index="4">
+            <div
+                class="glass-card p-10 md:p-14 rounded-3xl w-full max-w-4xl text-slate-800 shadow-2xl flex flex-col justify-center h-auto min-h-[70vh]">
+                <header class="mb-8 text-center animate-child delay-1">
+                    <span class="text-blue-600 font-bold tracking-widest uppercase text-sm">04. Gestão Mensal</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mt-2">Gestão de Autoridade</h2>
+                    <p class="text-slate-500 mt-2">Acompanhamento e Manutenção Contínua</p>
+                </header>
+
+                <div class="flex flex-col md:flex-row gap-8 items-center animate-child delay-2">
+                    <!-- Lista de Serviços -->
+                    <div class="flex-1 space-y-5">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle" class="text-green-500 w-6 h-6 shrink-0"></i>
+                            <span class="text-lg text-slate-700"><strong>Gestão LinkedIn:</strong> 3 posts
+                                estratégicos/semana.</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle" class="text-green-500 w-6 h-6 shrink-0"></i>
+                            <span class="text-lg text-slate-700"><strong>Gestão de Conteúdo:</strong> Publicação e
+                                distribuição de materiais fornecidos (podcasts/vídeos).</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle" class="text-green-500 w-6 h-6 shrink-0"></i>
+                            <span class="text-lg text-slate-700"><strong>Suporte Técnico:</strong> Manutenção do site e
+                                monitoramento.</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle" class="text-green-500 w-6 h-6 shrink-0"></i>
+                            <span class="text-lg text-slate-700"><strong>Relatórios:</strong> Análise mensal de
+                                performance e leads.</span>
+                        </div>
+                    </div>
+
+                    <!-- Card de Preço -->
+                    <div
+                        class="w-full md:w-1/3 bg-blue-600 text-white p-8 rounded-2xl shadow-xl text-center transform hover:scale-105 transition duration-300">
+                        <p class="text-blue-200 text-sm uppercase tracking-wider font-semibold mb-2">Mensalidade</p>
+                        <div class="flex justify-center items-baseline gap-1 mb-4">
+                            <span class="text-xl font-bold">R$</span>
+                            <span class="text-4xl font-black">600,00</span>
+                        </div>
+                        <p class="text-sm text-blue-100 opacity-80">Gestão completa da sua presença digital.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: FECHAMENTO -->
+        <div class="slide" data-index="5">
+            <div
+                class="glass-dark text-white p-12 md:p-24 rounded-3xl shadow-2xl max-w-5xl w-full flex flex-col items-center justify-center text-center relative overflow-hidden border border-white/10">
+                <!-- Background Glow -->
+                <div class="absolute inset-0 bg-blue-600/20 blur-[100px] z-0"></div>
+
+                <div class="relative z-10 w-full max-w-2xl">
+                    <i data-lucide="check-circle"
+                        class="w-20 h-20 text-green-400 mx-auto mb-8 animate-child delay-1"></i>
+
+                    <h2 class="text-4xl md:text-6xl font-black mb-6 animate-child delay-2">Próximos Passos</h2>
+
+                    <div
+                        class="space-y-4 text-left bg-white/5 p-8 rounded-2xl border border-white/10 mb-10 animate-child delay-3">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-sm">
+                                1</div>
+                            <p class="text-lg">Aprovação dos valores propostos.</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-sm">
+                                2</div>
+                            <p class="text-lg">Reunião de Kick-off (Definição Editorial).</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold text-sm">
+                                3</div>
+                            <p class="text-lg font-bold text-green-300">Start: Otimização Site + 1ª Gravação.</p>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-400 mb-2 animate-child delay-4">Vamos transformar a FN Energy?</p>
+                    <p class="text-xl font-bold animate-child delay-5">comercial@fn-ebi.com</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- UI Overlay Controls -->
+    <div class="fixed bottom-0 left-0 w-full z-50 p-6 flex justify-between items-end pointer-events-none">
+
+        <!-- Progress Bar -->
+        <div class="progress-bar w-0" id="progress"></div>
+
+        <!-- Nav Buttons -->
+        <div class="flex gap-4 pointer-events-auto mx-auto glass-card px-6 py-3 rounded-full">
+            <button id="btn-prev" class="p-2 rounded-full hover:bg-slate-200/50 transition disabled:opacity-30">
+                <i data-lucide="chevron-left" class="text-slate-800"></i>
+            </button>
+            <span id="slide-indicator"
+                class="font-mono font-bold text-slate-600 self-center w-12 text-center">1/6</span>
+            <button id="btn-next" class="p-2 rounded-full hover:bg-slate-200/50 transition disabled:opacity-30">
+                <i data-lucide="chevron-right" class="text-slate-800"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Logic -->
+    <script>
+        class Presentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+                this.isAnimating = false;
+
+                // Elements
+                this.btnPrev = document.getElementById('btn-prev');
+                this.btnNext = document.getElementById('btn-next');
+                this.indicator = document.getElementById('slide-indicator');
+                this.progressBar = document.getElementById('progress');
+                this.deck = document.getElementById('deck');
+
+                this.init();
+            }
+
+            init() {
+                this.updateUI();
+                this.addEventListeners();
+                lucide.createIcons();
+            }
+
+            goToSlide(index) {
+                if (index < 0 || index >= this.totalSlides || this.isAnimating) return;
+
+                this.isAnimating = true;
+                const direction = index > this.currentSlide ? 'next' : 'prev';
+
+                // Current Slide Exit
+                const current = this.slides[this.currentSlide];
+                current.classList.remove('active');
+
+                // New Slide Enter
+                this.currentSlide = index;
+                const next = this.slides[this.currentSlide];
+                next.classList.add('active');
+
+                // Cleanup animation lock
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 600); // Match CSS transition time
+
+                this.updateUI();
+            }
+
+            next() {
+                this.goToSlide(this.currentSlide + 1);
+            }
+
+            prev() {
+                this.goToSlide(this.currentSlide - 1);
+            }
+
+            updateUI() {
+                // Update Buttons
+                this.btnPrev.disabled = this.currentSlide === 0;
+                this.btnNext.disabled = this.currentSlide === this.totalSlides - 1;
+
+                // Update Text Indicator
+                this.indicator.innerText = `${this.currentSlide + 1}/${this.totalSlides}`;
+
+                // Update Progress Bar
+                const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+                this.progressBar.style.width = `${progress}%`;
+
+                // Re-init generic icons if needed (optional)
+            }
+
+            addEventListeners() {
+                // Buttons
+                this.btnPrev.addEventListener('click', () => this.prev());
+                this.btnNext.addEventListener('click', () => this.next());
+
+                // Keyboard
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight' || e.key === ' ') this.next();
+                    if (e.key === 'ArrowLeft') this.prev();
+                });
+
+                // Touch / Swipe
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                this.deck.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                this.deck.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe(touchStartX, touchEndX);
+                }, { passive: true });
+
+                // Mouse Wheel / Scroll (Optional - debounced)
+                let lastScrollTime = 0;
+                window.addEventListener('wheel', (e) => {
+                    const now = new Date().getTime();
+                    if (now - lastScrollTime < 1000) return; // 1 second cool down
+
+                    if (e.deltaY > 0) {
+                        this.next();
+                        lastScrollTime = now;
+                    } else if (e.deltaY < 0) {
+                        this.prev();
+                        lastScrollTime = now;
+                    }
+                });
+            }
+
+            handleSwipe(start, end) {
+                const threshold = 50;
+                if (start - end > threshold) {
+                    this.next(); // Swipe Left
+                }
+                if (end - start > threshold) {
+                    this.prev(); // Swipe Right
+                }
+            }
+        }
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const app = new Presentation();
+            // Force first slide active
+            document.querySelector('.slide').classList.add('active');
+        });
+
+    </script>
+</body>
+
+</html>
