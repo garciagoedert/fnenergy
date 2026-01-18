@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="bg-slate-50">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Parceiros - FN Energy Portal</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { blue: '#1e3a8a' } }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        // Protect this route
+        Auth.isAuthenticated(true);
+    </script>
+</head>
+
+<body class="font-sans text-slate-600 antialiased">
+
+    <!-- Portal Sidebar / Navigation -->
+    <div class="flex h-screen overflow-hidden bg-slate-100">
+
+        <!-- Sidebar -->
+        <aside class="hidden md:flex flex-col w-64 bg-slate-900 border-r border-slate-800">
+            <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+                <img src="../assets/img/logo_fn.svg" alt="FN" class="h-8 w-auto rounded">
+                <span class="text-white font-bold tracking-tight">Portal FN</span>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-lg">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span class="font-medium">Vendors List</span>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                    <span class="font-medium">Documentos</span>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span class="font-medium">Configurações</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="Auth.logout()"
+                    class="flex items-center gap-3 px-4 py-2 text-red-400 hover:text-red-300 w-full transition-colors text-sm font-medium">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Sair do Sistema</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 md:px-10">
+                <div class="flex items-center md:hidden gap-3">
+                    <button class="text-slate-500"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                    <span class="font-bold text-slate-800">Vendors List</span>
+                </div>
+                <!-- Search -->
+                <div class="hidden md:flex items-center w-96 relative">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3"></i>
+                    <input type="text" placeholder="Buscar parceiro, setor ou serviço..."
+                        class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <!-- User Profile -->
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-bold text-slate-800" id="userName">Usuário</p>
+                        <p class="text-xs text-slate-500">Cliente Premium</p>
+                    </div>
+                    <div
+                        class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold border border-blue-200">
+                        CP
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <main class="flex-1 overflow-y-auto p-6 md:p-10">
+                <div class="max-w-7xl mx-auto">
+
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-900">Catálogo de Parceiros</h1>
+                            <p class="text-slate-500">Empresas homologadas e indicadas pela FN Energy.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 flex items-center gap-2">
+                                <i data-lucide="filter" class="w-4 h-4"></i> Filtrar
+                            </button>
+                            <button
+                                class="px-4 py-2 bg-blue-900 text-white rounded-lg text-sm font-medium hover:bg-blue-800 flex items-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i> Exportar Lista
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Vendors Grid -->
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                        <!-- Vendor 1 -->
+                        <div
+                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-600 font-bold text-xl">
+                                    S
+                                </div>
+                                <span
+                                    class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Homologado</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">SolarTech Engenharia</h3>
+                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">Engenharia •
+                                <span class="text-yellow-600">Solar</span></p>
+                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
+                                Especialista em projetos de usinas solares de grande porte e minigeração distribuída.
+                            </p>
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+                                <span class="text-xs text-slate-400">Desde 2018</span>
+                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
+                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vendor 2 -->
+                        <div
+                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-xl">
+                                    W
+                                </div>
+                                <span
+                                    class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Homologado</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">WindPower Solutions</h3>
+                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">O&M • <span
+                                    class="text-blue-500">Eólica</span></p>
+                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
+                                Soluções completas para operação e manutenção de parques eólicos.
+                            </p>
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+                                <span class="text-xs text-slate-400">Desde 2015</span>
+                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
+                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vendor 3 -->
+                        <div
+                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-600 font-bold text-xl">
+                                    E
+                                </div>
+                                <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Em
+                                    Análise</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">EcoGrid Consultoria</h3>
+                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">Consultoria •
+                                <span class="text-emerald-500">Regulatório</span></p>
+                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
+                                Apoio regulatório para acessantes e agentes da CCEE.
+                            </p>
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+                                <span class="text-xs text-slate-400">Desde 2021</span>
+                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
+                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vendor 4 -->
+                        <div
+                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 font-bold text-xl">
+                                    D
+                                </div>
+                                <span
+                                    class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Homologado</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">DataEnergy Analytics</h3>
+                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">Software • <span
+                                    class="text-purple-500">Tech</span></p>
+                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
+                                Inteligência de dados para previsão de PLD e consumo.
+                            </p>
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+                                <span class="text-xs text-slate-400">Desde 2023</span>
+                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
+                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        document.getElementById('userName').textContent = Auth.getUserName();
+    </script>
+</body>
+
+</html>
