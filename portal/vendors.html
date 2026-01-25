@@ -20,6 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../assets/js/auth.js"></script>
+    <script src="js/vendors-data.js"></script>
     <script>
         // Protect this route
         Auth.isAuthenticated(true);
@@ -113,108 +114,8 @@
                     </div>
 
                     <!-- Vendors Grid -->
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                        <!-- Vendor 1 -->
-                        <div
-                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
-                            <div class="flex items-start justify-between mb-4">
-                                <div
-                                    class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-600 font-bold text-xl">
-                                    S
-                                </div>
-                                <span
-                                    class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Homologado</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">SolarTech Engenharia</h3>
-                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">Engenharia •
-                                <span class="text-yellow-600">Solar</span></p>
-                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
-                                Especialista em projetos de usinas solares de grande porte e minigeração distribuída.
-                            </p>
-                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
-                                <span class="text-xs text-slate-400">Desde 2018</span>
-                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
-                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Vendor 2 -->
-                        <div
-                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
-                            <div class="flex items-start justify-between mb-4">
-                                <div
-                                    class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-xl">
-                                    W
-                                </div>
-                                <span
-                                    class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Homologado</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">WindPower Solutions</h3>
-                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">O&M • <span
-                                    class="text-blue-500">Eólica</span></p>
-                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
-                                Soluções completas para operação e manutenção de parques eólicos.
-                            </p>
-                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
-                                <span class="text-xs text-slate-400">Desde 2015</span>
-                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
-                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Vendor 3 -->
-                        <div
-                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
-                            <div class="flex items-start justify-between mb-4">
-                                <div
-                                    class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-600 font-bold text-xl">
-                                    E
-                                </div>
-                                <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Em
-                                    Análise</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">EcoGrid Consultoria</h3>
-                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">Consultoria •
-                                <span class="text-emerald-500">Regulatório</span></p>
-                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
-                                Apoio regulatório para acessantes e agentes da CCEE.
-                            </p>
-                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
-                                <span class="text-xs text-slate-400">Desde 2021</span>
-                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
-                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Vendor 4 -->
-                        <div
-                            class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group">
-                            <div class="flex items-start justify-between mb-4">
-                                <div
-                                    class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 font-bold text-xl">
-                                    D
-                                </div>
-                                <span
-                                    class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Homologado</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">DataEnergy Analytics</h3>
-                            <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">Software • <span
-                                    class="text-purple-500">Tech</span></p>
-                            <p class="text-sm text-slate-600 mb-6 line-clamp-2">
-                                Inteligência de dados para previsão de PLD e consumo.
-                            </p>
-                            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
-                                <span class="text-xs text-slate-400">Desde 2023</span>
-                                <button class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
-                                    Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
+                    <div id="vendorsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Content injected by JS -->
                     </div>
                 </div>
             </main>
@@ -224,6 +125,41 @@
     <script>
         lucide.createIcons();
         document.getElementById('userName').textContent = Auth.getUserName();
+
+        // Render Vendors
+        const grid = document.getElementById('vendorsGrid');
+
+        vendorsData.forEach(vendor => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6 group';
+
+            card.innerHTML = `
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl ${vendor.logoBg} ${vendor.logoColor}">
+                        ${vendor.logoLetter}
+                    </div>
+                    <span class="${vendor.statusColor} text-xs font-bold px-2 py-1 rounded">${vendor.status}</span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-1">${vendor.name}</h3>
+                <p class="text-xs text-slate-400 font-medium uppercase tracking-wide mb-3">
+                    ${vendor.type} • <span class="${vendor.categoryColor}">${vendor.category}</span>
+                </p>
+                <p class="text-sm text-slate-600 mb-6 line-clamp-2">
+                    ${vendor.description}
+                </p>
+                <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+                    <span class="text-xs text-slate-400">Desde ${vendor.since}</span>
+                    <a href="vendor-profile.html?id=${vendor.id}" class="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1">
+                        Ver Perfil <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            `;
+
+            grid.appendChild(card);
+        });
+
+        // Re-run lucide for new icons
+        lucide.createIcons();
     </script>
 </body>
 

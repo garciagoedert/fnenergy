@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="bg-slate-50">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Parceiro - FN Energy Portal</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { blue: '#1e3a8a' } }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/auth.js"></script>
+    <!-- Import Vendor Data -->
+    <script src="js/vendors-data.js"></script>
+    <script>
+        // Protect this route
+        Auth.isAuthenticated(true);
+    </script>
+</head>
+
+<body class="font-sans text-slate-600 antialiased">
+
+    <!-- Portal Sidebar / Navigation -->
+    <div class="flex h-screen overflow-hidden bg-slate-100">
+
+        <!-- Sidebar -->
+        <aside class="hidden md:flex flex-col w-64 bg-slate-900 border-r border-slate-800">
+            <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+                <img src="../assets/img/logo_fn.svg" alt="FN" class="h-8 w-auto rounded">
+                <span class="text-white font-bold tracking-tight">Portal FN</span>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="vendors.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-slate-800 text-white rounded-lg transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span class="font-medium">Voltar para Lista</span>
+                </a>
+                <div class="px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-4">
+                    Menu
+                </div>
+                <a href="vendors.html"
+                    class="flex items-center gap-3 px-4 py-3 text-blue-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span class="font-medium">Vendors List</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="Auth.logout()"
+                    class="flex items-center gap-3 px-4 py-2 text-red-400 hover:text-red-300 w-full transition-colors text-sm font-medium">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Sair do Sistema</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 md:px-10">
+                <div class="flex items-center md:hidden gap-3">
+                    <a href="vendors.html" class="text-slate-500"><i data-lucide="arrow-left" class="w-6 h-6"></i></a>
+                    <span class="font-bold text-slate-800">Perfil do Parceiro</span>
+                </div>
+
+                <div class="hidden md:block">
+                    <!-- Breadcrumb -->
+                    <nav class="flex" aria-label="Breadcrumb">
+                        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                            <li class="inline-flex items-center">
+                                <a href="vendors.html"
+                                    class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600">
+                                    <i data-lucide="users" class="w-4 h-4 mr-2"></i>
+                                    Vendors
+                                </a>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                                    <span class="ml-1 text-sm font-medium text-slate-800 md:ml-2"
+                                        id="breadcrumbName">Carregando...</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <!-- User Profile -->
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-bold text-slate-800" id="userName">Usuário</p>
+                        <p class="text-xs text-slate-500">Cliente Premium</p>
+                    </div>
+                    <div
+                        class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold border border-blue-200">
+                        CP
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <main class="flex-1 overflow-y-auto p-6 md:p-10">
+                <div id="loadingState" class="flex flex-col items-center justify-center h-full text-slate-400">
+                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin mb-4"></i>
+                    <p>Carregando perfil...</p>
+                </div>
+
+                <div id="errorState" class="hidden flex flex-col items-center justify-center h-full text-red-500">
+                    <i data-lucide="alert-octagon" class="w-12 h-12 mb-4"></i>
+                    <h2 class="text-xl font-bold mb-2">Parceiro não encontrado</h2>
+                    <p class="text-slate-500 mb-6">O parceiro que você procura não existe ou foi removido.</p>
+                    <a href="vendors.html"
+                        class="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors">Voltar
+                        para Lista</a>
+                </div>
+
+                <div id="contentState" class="hidden max-w-5xl mx-auto animate-fade-in-up">
+
+                    <!-- Cover / Header Vendor -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                        <div class="h-32 bg-gradient-to-r from-slate-100 to-slate-200 relative">
+                            <!-- Optional Cover Image could go here -->
+                        </div>
+                        <div class="px-8 pb-8">
+                            <div class="relative flex justify-between items-end -mt-12 mb-6">
+                                <div class="flex items-end gap-6">
+                                    <div id="vendorLogo"
+                                        class="w-24 h-24 rounded-2xl flex items-center justify-center text-4xl font-bold shadow-lg border-4 border-white bg-slate-100 text-slate-600">
+                                        ?
+                                    </div>
+                                    <div class="mb-1">
+                                        <h1 id="vendorName" class="text-3xl font-bold text-slate-900">Nome do Parceiro
+                                        </h1>
+                                        <div class="flex items-center gap-3 text-sm mt-1">
+                                            <span id="vendorType" class="text-slate-500 font-medium">Tipo</span>
+                                            <span class="text-slate-300">•</span>
+                                            <span id="vendorCategory"
+                                                class="text-blue-600 font-semibold">Categoria</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:block mb-2">
+                                    <span id="vendorStatus"
+                                        class="px-3 py-1 rounded-full text-sm font-bold bg-slate-100 text-slate-600">
+                                        Status
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p id="vendorDescription" class="text-slate-600 text-lg leading-relaxed max-w-3xl">
+                                Descrição curta do parceiro...
+                            </p>
+
+                            <div
+                                class="flex items-center gap-6 mt-6 pt-6 border-t border-slate-100 text-sm text-slate-500">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                    Parceiro desde <span id="vendorSince"
+                                        class="font-semibold text-slate-700">2023</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                    <span id="vendorLocation">Brasil</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                        <!-- Left Column: Details -->
+                        <div class="lg:col-span-2 space-y-6">
+
+                            <!-- About -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+                                <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                    <i data-lucide="info" class="w-5 h-5 text-blue-600"></i> Sobre a Empresa
+                                </h2>
+                                <p id="vendorLongDescription" class="text-slate-600 leading-relaxed">
+                                    Descrição detalhada...
+                                </p>
+                            </div>
+
+                            <!-- Services -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+                                <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                    <i data-lucide="briefcase" class="w-5 h-5 text-blue-600"></i> Serviços &
+                                    Especialidades
+                                </h2>
+                                <div id="vendorServices" class="grid sm:grid-cols-2 gap-4">
+                                    <!-- Services injected here -->
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Contact & Actions -->
+                        <div class="space-y-6">
+
+                            <!-- Contact Card -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                                <h3 class="text-base font-bold text-slate-900 mb-4">Informações de Contato</h3>
+
+                                <div class="space-y-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-blue-50 p-2 rounded-lg text-blue-600 mt-1">
+                                            <i data-lucide="mail" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-slate-400 font-medium uppercase">Email</p>
+                                            <a id="contactEmail" href="#"
+                                                class="text-sm font-medium text-slate-700 hover:text-blue-600 break-all">email@exemplo.com</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-blue-50 p-2 rounded-lg text-blue-600 mt-1">
+                                            <i data-lucide="phone" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-slate-400 font-medium uppercase">Telefone</p>
+                                            <p id="contactPhone" class="text-sm font-medium text-slate-700">--</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-blue-50 p-2 rounded-lg text-blue-600 mt-1">
+                                            <i data-lucide="globe" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-slate-400 font-medium uppercase">Website</p>
+                                            <a id="contactWebsite" href="#" target="_blank"
+                                                class="text-sm font-medium text-slate-700 hover:text-blue-600">Visitar
+                                                site</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-blue-50 p-2 rounded-lg text-blue-600 mt-1">
+                                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-slate-400 font-medium uppercase">Endereço</p>
+                                            <p id="contactAddress" class="text-sm font-medium text-slate-700">--</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button
+                                    class="w-full mt-6 py-2.5 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg text-sm transition-colors flex items-center justify-center gap-2">
+                                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                                    Solicitar Contato
+                                </button>
+                            </div>
+
+                            <!-- Documents (Mockup) -->
+                            <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 opacity-75">
+                                <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center justify-between">
+                                    Documentos
+                                    <i data-lucide="lock" class="w-4 h-4 text-slate-400"></i>
+                                </h3>
+                                <div class="space-y-2">
+                                    <div
+                                        class="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 text-sm cursor-not-allowed">
+                                        <div class="flex items-center gap-2 text-slate-400">
+                                            <i data-lucide="file-check" class="w-4 h-4"></i>
+                                            <span>Certificado ISO</span>
+                                        </div>
+                                        <i data-lucide="download" class="w-4 h-4 text-slate-300"></i>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 text-sm cursor-not-allowed">
+                                        <div class="flex items-center gap-2 text-slate-400">
+                                            <i data-lucide="file-check" class="w-4 h-4"></i>
+                                            <span>Homologação FN</span>
+                                        </div>
+                                        <i data-lucide="download" class="w-4 h-4 text-slate-300"></i>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2 text-center">Acesso restrito a gestores.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        document.getElementById('userName').textContent = Auth.getUserName();
+
+        // Load Vendor Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const vendorId = params.get('id');
+
+            const loadingState = document.getElementById('loadingState');
+            const errorState = document.getElementById('errorState');
+            const contentState = document.getElementById('contentState');
+
+            // Find vendor
+            const vendor = vendorsData.find(v => v.id === vendorId);
+
+            if (!vendor) {
+                loadingState.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                return;
+            }
+
+            // Populate Data
+
+            // Header
+            document.getElementById('breadcrumbName').textContent = vendor.name;
+            document.title = `${vendor.name} - FN Energy Portal`;
+
+            document.getElementById('vendorName').textContent = vendor.name;
+            document.getElementById('vendorType').textContent = vendor.type;
+
+            const catEl = document.getElementById('vendorCategory');
+            catEl.textContent = vendor.category;
+            catEl.className = `font-semibold ${vendor.categoryColor}`;
+
+            const statusEl = document.getElementById('vendorStatus');
+            statusEl.textContent = vendor.status;
+            statusEl.className = `px-3 py-1 rounded-full text-sm font-bold ${vendor.statusColor}`;
+
+            document.getElementById('vendorDescription').textContent = vendor.description;
+            document.getElementById('vendorSince').textContent = vendor.since;
+
+            document.getElementById('vendorLongDescription').textContent = vendor.longDescription;
+            document.getElementById('contactAddress').textContent = vendor.contact.address;
+
+            // Logo
+            const logoEl = document.getElementById('vendorLogo');
+            logoEl.textContent = vendor.logoLetter;
+            logoEl.className = `w-24 h-24 rounded-2xl flex items-center justify-center text-4xl font-bold shadow-lg border-4 border-white ${vendor.logoBg} ${vendor.logoColor}`;
+
+            // Services
+            const servicesContainer = document.getElementById('vendorServices');
+            vendor.services.forEach(service => {
+                const el = document.createElement('div');
+                el.className = 'flex items-center gap-3 p-3 bg-slate-50 rounded-lg text-sm text-slate-700 border border-slate-100';
+                el.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> ${service}`;
+                servicesContainer.appendChild(el);
+            });
+
+            // Contact
+            const emailEl = document.getElementById('contactEmail');
+            emailEl.textContent = vendor.contact.email;
+            emailEl.href = `mailto:${vendor.contact.email}`;
+
+            document.getElementById('contactPhone').textContent = vendor.contact.phone;
+
+            const siteEl = document.getElementById('contactWebsite');
+            siteEl.href = `https://${vendor.contact.website}`;
+
+            // Show Content
+            setTimeout(() => { // Small fake delay for smooth feel
+                loadingState.classList.add('hidden');
+                contentState.classList.remove('hidden');
+                lucide.createIcons();
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>
