@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="bg-slate-900 overflow-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch Deck - FN Energy</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#1e3a8a',
+                            light: '#3b82f6',
+                            purple: '#a855f7',
+                            cyan: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #0b1120; color: #f8fafc; overflow: hidden; }
+        
+        /* Slides */
+        .slide { 
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; 
+            opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease-out; 
+        }
+        .slide.active { 
+            opacity: 1; visibility: visible; pointer-events: auto; z-index: 10;
+        }
+        .slide.prev {
+            /* Sem transform para melhorar performance */
+        }
+        
+        /* Glass Panels */
+        .glass-panel { 
+            background: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Controls */
+        .nav-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 50%; width: 56px; height: 56px; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: all 0.3s; color: rgba(255,255,255,0.7);
+            backdrop-filter: blur(4px);
+        }
+        .nav-btn:hover { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: white; transform: scale(1.05); }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; background: rgba(255,255,255,0.05); }
+        
+        .progress-bar-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 50; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #3b82f6, #a855f7); transition: width 0.4s ease; width: 0%; }
+        
+        /* Background Gradients */
+        .bg-glow-blue { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%); top: -100px; right: -100px; border-radius: 50%; pointer-events: none; }
+        .bg-glow-purple { position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, rgba(0,0,0,0) 70%); bottom: -100px; left: -100px; border-radius: 50%; pointer-events: none; }
+        
+        /* Typography adjustments for presentation */
+        .text-gradient { background: linear-gradient(to right, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden">
+
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="bg-glow-blue"></div>
+        <div class="bg-glow-purple"></div>
+        <div class="absolute inset-0 opacity-5 mix-blend-overlay bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop');"></div>
+    </div>
+
+    <!-- Header / Branding -->
+    <div class="fixed top-8 left-8 z-50 flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-3 group hover:opacity-80 transition-opacity">
+            <img src="assets/img/logo_fn.svg" alt="FN Energy Logo" class="h-10 w-auto rounded-lg shadow-lg">
+            <span class="text-xl font-bold tracking-tight text-white">FN Energy</span>
+        </a>
+        <div class="h-6 w-px bg-slate-700"></div>
+        <span class="text-xs text-blue-400 uppercase tracking-[0.2em] font-bold">Pitch Deck</span>
+    </div>
+
+    <!-- Slide Indicators (Dots) -->
+    <div class="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3" id="indicators">
+        <!-- Generated by JS -->
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="fixed bottom-8 right-8 z-50 flex gap-4">
+        <button id="prevBtn" class="nav-btn" aria-label="Slide anterior">
+            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+        </button>
+        <button id="nextBtn" class="nav-btn" aria-label="Próximo slide">
+            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Presentation Container -->
+    <main id="presentation-container" class="relative w-full h-full z-10">
+
+        <!-- SLIDE 1: Capa -->
+        <section class="slide active flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full h-full flex flex-col md:flex-row items-center justify-between gap-16">
+                <!-- Left: Title -->
+                <div class="w-full md:w-3/5 space-y-8">
+                    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight text-white">
+                        FN Energy: Business Intelligence para <span class="text-gradient">Mercados de Energia</span>
+                    </h1>
+                    <p class="text-2xl text-slate-300 font-light">
+                        Conectando Negócios, Unindo Pessoas.
+                    </p>
+                    <div class="inline-block mt-4 glass-panel border-l-4 border-l-blue-500 px-6 py-4">
+                        <p class="text-sm md:text-base text-blue-100 font-bold tracking-wide uppercase">
+                            Não somos apenas consultores — somos estruturadores de mercado.
+                        </p>
+                    </div>
+                </div>
+                <!-- Right: Graphic Representation -->
+                <div class="w-full md:w-2/5 flex justify-center">
+                    <div class="relative w-80 h-80">
+                        <div class="absolute inset-0 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+                        <div class="absolute inset-0 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+                        <img src="assets/img/logo_fn.svg" alt="FN Energy Logo" class="w-full h-full object-contain drop-shadow-2xl opacity-80">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Nossa Força -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full">
+                <div class="mb-16">
+                    <h2 class="text-blue-400 font-bold tracking-widest uppercase mb-2 text-sm">Nossa Força</h2>
+                    <h3 class="text-6xl font-bold text-white mb-6">R$ 3,6 Bilhões+</h3>
+                    <p class="text-xl text-slate-400 max-w-4xl leading-relaxed">
+                        Em contratos negociados no setor elétrico — fruto de quase <strong>40 anos de experiência combinada</strong>, integrando visão comercial agressiva e rigor técnico de ponta.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+                    <!-- Metric 1 -->
+                    <div class="glass-panel p-10 rounded-3xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-2xl -mr-10 -mt-10 transition-all group-hover:bg-blue-600/20"></div>
+                        <h4 class="text-7xl font-black text-white mb-4">40</h4>
+                        <h5 class="text-xl font-semibold text-blue-300 mb-2">Anos de Experiência</h5>
+                        <p class="text-slate-400">Combinada entre os sócios fundadores.</p>
+                    </div>
+                    
+                    <!-- Metric 2 -->
+                    <div class="glass-panel p-10 rounded-3xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-purple-600/10 rounded-full blur-2xl -mr-10 -mt-10 transition-all group-hover:bg-purple-600/20"></div>
+                        <h4 class="text-7xl font-black text-white mb-4">R$3,6<span class="text-4xl text-slate-400">Bi</span></h4>
+                        <h5 class="text-xl font-semibold text-purple-300 mb-2">Contratos Estruturados</h5>
+                        <p class="text-slate-400">No complexo setor elétrico brasileiro.</p>
+                    </div>
+
+                    <!-- Metric 3 -->
+                    <div class="glass-panel p-10 rounded-3xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-600/10 rounded-full blur-2xl -mr-10 -mt-10 transition-all group-hover:bg-cyan-600/20"></div>
+                        <h4 class="text-7xl font-black text-white mb-4">15<span class="text-5xl text-slate-400">%</span></h4>
+                        <h5 class="text-xl font-semibold text-cyan-300 mb-2">Redução de OPEX</h5>
+                        <p class="text-slate-400">Eficiência demonstrada em usinas solares, eólicas e hidrelétricas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: O Abismo do Setor Elétrico -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full h-full flex flex-col justify-center">
+                <div class="mb-12">
+                    <h2 class="text-5xl font-bold text-white mb-6">O Abismo do Setor Elétrico</h2>
+                    <p class="text-xl text-slate-400 max-w-4xl leading-relaxed">
+                        A transição energética (Mercado Livre, PL 414/2021, expansão da GD) exige precisão absoluta. Mas o mercado sofre de uma <span class="text-white font-semibold border-b border-blue-500">fratura estrutural.</span>
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 relative">
+                    <!-- Connector line -->
+                    <div class="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 z-0 opacity-50"></div>
+                    <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-800 border-2 border-slate-600 z-10 items-center justify-center">
+                        <i data-lucide="x" class="w-6 h-6 text-slate-400"></i>
+                    </div>
+
+                    <!-- Box 1 -->
+                    <div class="glass-panel p-10 rounded-3xl border-t-4 border-t-purple-500 relative z-10">
+                        <h3 class="text-2xl font-bold text-purple-400 mb-4 flex items-center gap-3">
+                            <i data-lucide="trending-up" class="w-8 h-8"></i> O Comercial Isolado
+                        </h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Alta agressividade financeira, mas desconexão com a realidade operacional e os riscos de engenharia do ativo.
+                        </p>
+                    </div>
+
+                    <!-- Box 2 -->
+                    <div class="glass-panel p-10 rounded-3xl border-t-4 border-t-cyan-500 relative z-10">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-4 flex items-center gap-3">
+                            <i data-lucide="settings" class="w-8 h-8"></i> A Engenharia Isolada
+                        </h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Alto rigor técnico de O&M, mas dificuldade em tracionar viabilidade financeira e estruturar grandes negócios.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-900/50 to-blue-800/50 border border-blue-500/30 rounded-2xl p-6 flex items-center justify-center text-center shadow-lg shadow-blue-900/20">
+                    <p class="text-xl md:text-2xl font-semibold text-white">
+                        <i data-lucide="bridge" class="inline-block w-8 h-8 text-blue-400 mr-3 align-middle"></i>
+                        Onde o mercado vê dois mundos separados, a <span class="text-blue-400">FN Energy constrói a ponte.</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: A Equação FN Energy -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">A Equação FN Energy: Síntese de Liderança</h2>
+                    <p class="text-xl text-slate-400">Três perfis complementares formam o núcleo que une o comercial ao técnico.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Profile 1 -->
+                    <div class="glass-panel p-8 rounded-3xl text-center group hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-28 h-28 mx-auto rounded-full bg-slate-800 border-4 border-blue-500 overflow-hidden mb-6 relative">
+                            <img src="assets/img/rostofelipe.png" alt="Felipe Andreas" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">Felipe Andreas</h3>
+                        <p class="text-sm text-blue-400 font-bold uppercase tracking-wider mb-6">CCO</p>
+                        <div class="text-left space-y-3 border-t border-slate-700 pt-6">
+                            <p class="text-white font-semibold"><span class="text-blue-400">O Negociador.</span> 19+ anos.</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">Liderou R$ 3,6 Bi em M&A sell-side e energias renováveis. A ponte para o capital.</p>
+                        </div>
+                    </div>
+
+                    <!-- Profile 2 -->
+                    <div class="glass-panel p-8 rounded-3xl text-center group hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-28 h-28 mx-auto rounded-full bg-slate-800 border-4 border-purple-500 overflow-hidden mb-6 relative">
+                            <img src="assets/img/perfilbruno.jpeg" alt="Bruno Chiarello" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">Bruno Chiarello</h3>
+                        <p class="text-sm text-purple-400 font-bold uppercase tracking-wider mb-6">Arquiteto de Soluções</p>
+                        <div class="text-left space-y-3 border-t border-slate-700 pt-6">
+                            <p class="text-white font-semibold"><span class="text-purple-400">O Arquiteto.</span></p>
+                            <p class="text-slate-400 text-sm leading-relaxed">Motor técnico de BI, automação e arquitetura de soluções. Transforma dados brutos em inteligência operável.</p>
+                        </div>
+                    </div>
+
+                    <!-- Profile 3 -->
+                    <div class="glass-panel p-8 rounded-3xl text-center group hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-28 h-28 mx-auto rounded-full bg-slate-800 border-4 border-cyan-500 overflow-hidden mb-6 relative">
+                            <img src="assets/img/rostonacib.png" alt="Nacib Elias" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">Nacib Elias</h3>
+                        <p class="text-sm text-cyan-400 font-bold uppercase tracking-wider mb-6">Engenheiro O&M</p>
+                        <div class="text-left space-y-3 border-t border-slate-700 pt-6">
+                            <p class="text-white font-semibold"><span class="text-cyan-400">O Engenheiro.</span> 20+ anos.</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">Engenharia de Aplicação, O&M e auditorias técnicas de estruturas e subestações.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Ecossistema de Soluções -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Ecossistema de Soluções: Do Greenfield ao Exit</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                    <!-- Solution 1 -->
+                    <div class="glass-panel p-8 rounded-2xl flex items-start gap-6 hover:bg-slate-800/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shrink-0">
+                            <i data-lucide="radar" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Radar & Networking</h3>
+                            <p class="text-slate-400 leading-relaxed">Mapeamento de mercado e captura de projetos invisíveis via inteligência de dados.</p>
+                        </div>
+                    </div>
+
+                    <!-- Solution 2 -->
+                    <div class="glass-panel p-8 rounded-2xl flex items-start gap-6 hover:bg-slate-800/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center shrink-0">
+                            <i data-lucide="settings-2" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Engenharia & O&M</h3>
+                            <p class="text-slate-400 leading-relaxed">Centros de Controle, auditoria de geração e arquitetura técnica para garantir performance do ativo.</p>
+                        </div>
+                    </div>
+
+                    <!-- Solution 3 -->
+                    <div class="glass-panel p-8 rounded-2xl flex items-start gap-6 hover:bg-slate-800/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0">
+                            <i data-lucide="handshake" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-3">M&A (Sell-Side)</h3>
+                            <p class="text-slate-400 leading-relaxed">Gestão de Key Accounts, contratos EPC/O&M e estruturação definitiva de M&A.</p>
+                        </div>
+                    </div>
+
+                    <!-- Solution 4 -->
+                    <div class="glass-panel p-8 rounded-2xl flex items-start gap-6 hover:bg-slate-800/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shrink-0">
+                            <i data-lucide="lightbulb" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Mentoria de Startups</h3>
+                            <p class="text-slate-400 leading-relaxed">Modelagem de negócios e acesso a players — conectando inovação técnica à realidade do setor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: A Vantagem Preditiva -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-12 text-center">A Vantagem Preditiva: Radar de Negócios FN</h2>
+                <div class="flex flex-col md:flex-row gap-12 items-center">
+                    <div class="w-full md:w-1/2 flex justify-center relative">
+                        <div class="w-80 h-80 rounded-full border-2 border-slate-700 flex items-center justify-center relative">
+                            <div class="absolute inset-0 rounded-full border-2 border-slate-600 scale-75 flex items-center justify-center">
+                                <div class="w-32 h-32 rounded-full bg-blue-600/30 border border-blue-400 flex items-center justify-center text-center shadow-[0_0_30px_rgba(59,130,246,0.4)]">
+                                    <span class="font-bold text-blue-200">O Diferencial<br>FN</span>
+                                </div>
+                            </div>
+                            <span class="absolute top-12 text-sm text-purple-300 font-semibold">Market Intelligence FN</span>
+                            <span class="absolute -top-6 text-sm text-slate-400">Mercado Tradicional</span>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-8">
+                        <div>
+                            <h3 class="text-xl text-slate-400 mb-2 font-semibold">Mercado Tradicional</h3>
+                            <p class="text-slate-500">Reage a RFPs públicas com alta concorrência e margens comprimidas.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl text-purple-400 mb-2 font-semibold">Market Intelligence FN</h3>
+                            <p class="text-purple-200">Mapeamento contínuo de players, gargalos regulatórios e gaps de infraestrutura.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl text-blue-400 mb-2 font-semibold">O Diferencial FN</h3>
+                            <p class="text-blue-200">Networking estratégico. Negócios concretizados antes que o mercado saiba que existem.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Engenharia de Aplicação -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-1/2 space-y-6">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-2">Engenharia de Aplicação & Radar de Negócios</h2>
+                    <h3 class="text-2xl text-blue-400 font-semibold mb-4">A Técnica que Viabiliza o Financeiro</h3>
+                    <p class="text-slate-300 text-lg">Não entregamos apenas relatórios. Desenhamos a infraestrutura operacional.</p>
+                    
+                    <ul class="space-y-4 text-slate-300 mt-6">
+                        <li><strong class="text-white">Centros de Controle:</strong> Arquitetura de soluções e modelagem econômica para O&M de alta complexidade.</li>
+                        <li><strong class="text-white">Auditoria Estrutural:</strong> Avaliação de estruturas de geração e subestações para mitigar riscos de M&A.</li>
+                        <li><strong class="text-white">Eficiência comprovada:</strong> Redução de OPEX de até 15% em usinas solares, eólicas, hidrelétricas e transmissoras.</li>
+                    </ul>
+
+                    <div class="glass-panel border-l-4 border-emerald-500 bg-emerald-900/20 p-4 mt-8 rounded-r-lg">
+                        <p class="text-emerald-300 font-semibold flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i> A Era do Papel Acabou. Nossa metodologia já demonstra capacidade de eficientizar OPEX em até 15%.
+                        </p>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-md aspect-square bg-purple-900/20 rounded-full flex items-center justify-center border border-purple-500/30 shadow-[0_0_50px_rgba(168,85,247,0.2)]">
+                        <i data-lucide="server" class="w-32 h-32 text-purple-400 opacity-80"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: A Arte de Vender Engenharia -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-12">A Arte de Vender Engenharia</h2>
+                <div class="flex flex-col md:flex-row gap-12">
+                    <div class="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="glass-panel p-8 rounded-2xl bg-slate-800/80 border-t-4 border-purple-500">
+                            <h3 class="text-2xl font-bold text-purple-300 mb-6">Modelo Avestruz (Tradicional)</h3>
+                            <ul class="space-y-4 text-slate-300">
+                                <li><strong class="text-white">Postura:</strong> Passivo. Foca apenas na entrega técnica isolada.</li>
+                                <li><strong class="text-white">Linguagem:</strong> Jargão puramente técnico, desconectado do investidor.</li>
+                                <li><strong class="text-white">Entrega:</strong> Venda de horas-homem e laudos.</li>
+                            </ul>
+                        </div>
+                        <div class="p-8 rounded-2xl border border-blue-500/30 bg-blue-900/10 shadow-[inset_0_0_20px_rgba(59,130,246,0.1)]">
+                            <h3 class="text-2xl font-bold text-blue-400 mb-6">Modelo Garnisé (FN Energy)</h3>
+                            <ul class="space-y-4 text-blue-100">
+                                <li><strong class="text-white">Proativo e territorial:</strong> Vai atrás do negócio e ataca a dor financeira do cliente.</li>
+                                <li><strong class="text-white">Tradução bidirecional:</strong> Conecta a especificação do transformador ao impacto no EBITDA.</li>
+                                <li><strong class="text-white">Entrega:</strong> Viabilidade, redução de OPEX e M&A técnico.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 flex justify-center items-center">
+                        <div class="w-full aspect-square max-w-sm rounded-2xl bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-slate-700 flex items-center justify-center">
+                            <i data-lucide="crown" class="w-24 h-24 text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: Visão 2026+ -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full">
+                <div class="mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Visão 2026+: O Tabuleiro da Energia</h2>
+                    <p class="text-xl text-slate-400">As análises estratégicas que orientam os grandes players, sintetizadas.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div class="glass-panel p-8 rounded-2xl border-l-4 border-blue-400">
+                        <h3 class="text-xl font-bold text-white mb-4">Estratégia & ACL — O Futuro do Mercado Livre</h3>
+                        <p class="text-slate-300">A abertura em 2026 forçará grandes indústrias a lidarem com extrema volatilidade de preços. A migração inteligente pode gerar economias de até <strong class="text-white">30%</strong> (ex: Indústria Têxtil).</p>
+                    </div>
+                    <div class="glass-panel p-8 rounded-2xl border-l-4 border-purple-400">
+                        <h3 class="text-xl font-bold text-white mb-4">Infraestrutura & Risco — O Impacto Oculto da GD</h3>
+                        <p class="text-slate-300">A penetração massiva da Geração Distribuída força a revisão compulsória dos protocolos de proteção das concessionárias. <strong class="text-white">Risco e oportunidade de infraestrutura.</strong></p>
+                    </div>
+                    <div class="glass-panel p-8 rounded-2xl border-l-4 border-cyan-400">
+                        <h3 class="text-xl font-bold text-white mb-4">Regulação — PL 414/2021</h3>
+                        <p class="text-slate-300">A modernização do setor exige <strong class="text-white">arquitetura de soluções</strong> que integre novos modelos de contratação à segurança operacional.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-xl border border-slate-600 bg-slate-800/50 italic text-slate-300 text-center">
+                    "A FN Energy tem sido uma parceira fundamental, trazendo insights estratégicos que vão muito além da engenharia tradicional. A expertise deles é um diferencial competitivo real." 
+                    <span class="block mt-2 not-italic font-bold text-white">— Mariana Costa, Diretora de Operações</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: Inicialização -->
+        <section class="slide flex items-center justify-center">
+            <div class="container mx-auto px-12 max-w-7xl w-full flex flex-col md:flex-row items-center gap-16">
+                <div class="w-full md:w-1/2 space-y-8">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white leading-tight">Inicialização de Sistema:<br><span class="text-blue-400">Pronto para Conectar</span></h2>
+                    <p class="text-xl text-slate-300">Você tem um desafio particular com o qual está tentando lidar?<br><strong class="text-white">Ative nosso radar.</strong></p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-panel p-6 rounded-xl">
+                            <div class="flex items-center gap-3 mb-2 text-slate-300 font-semibold">
+                                <i data-lucide="building-2" class="w-5 h-5"></i> HQ
+                            </div>
+                            <p class="text-sm text-slate-400">Rua Joe Collaço, 605 — Santa Mônica, Florianópolis - SC</p>
+                        </div>
+                        <div class="glass-panel p-6 rounded-xl">
+                            <div class="flex items-center gap-3 mb-2 text-slate-300 font-semibold">
+                                <i data-lucide="mail" class="w-5 h-5"></i> E-mail
+                            </div>
+                            <a href="mailto:comercial@fn-ebi.com" class="text-sm text-blue-400 hover:text-blue-300 transition-colors">comercial@fn-ebi.com</a>
+                        </div>
+                        <div class="glass-panel p-6 rounded-xl sm:col-span-2">
+                            <div class="flex items-center gap-3 mb-2 text-slate-300 font-semibold">
+                                <i data-lucide="phone" class="w-5 h-5"></i> Telefone
+                            </div>
+                            <p class="text-sm text-slate-400">+55 48 991 074 553</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-900/30 border border-blue-500/30 p-4 rounded-lg flex items-start gap-4">
+                        <i data-lucide="info" class="w-6 h-6 text-blue-400 shrink-0 mt-1"></i>
+                        <p class="text-sm text-blue-100">
+                            <strong>Acesso Restrito:</strong> Nossos clientes ganham acesso direto à Rede de Parceiros Homologados FN Energy — vendors auditados com garantia de qualidade.
+                        </p>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-lg aspect-square bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-full flex items-center justify-center border border-slate-700 shadow-[0_0_100px_rgba(59,130,246,0.15)]">
+                        <i data-lucide="network" class="w-40 h-40 text-blue-400 opacity-90"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Presentation Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progressBar = document.getElementById('progressBar');
+            const indicatorsContainer = document.getElementById('indicators');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            // Create indicators
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'bg-blue-500 scale-125' : 'bg-slate-600 hover:bg-slate-500'}`;
+                dot.setAttribute('aria-label', `Ir para slide ${index + 1}`);
+                dot.addEventListener('click', () => goToSlide(index));
+                indicatorsContainer.appendChild(dot);
+            });
+
+            const indicators = indicatorsContainer.querySelectorAll('button');
+
+            function updateUI() {
+                // Update slides
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev');
+                    if (index === currentSlide) {
+                        slide.classList.add('active');
+                    } else if (index < currentSlide) {
+                        slide.classList.add('prev');
+                    }
+                });
+
+                // Update Progress Bar
+                const progress = ((currentSlide) / (totalSlides - 1)) * 100;
+                progressBar.style.width = `${progress}%`;
+
+                // Update Buttons
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === totalSlides - 1;
+
+                // Update Indicators
+                indicators.forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.className = 'w-3 h-3 rounded-full transition-all duration-300 bg-blue-500 scale-125 shadow-[0_0_10px_rgba(59,130,246,0.8)]';
+                    } else {
+                        dot.className = 'w-3 h-3 rounded-full transition-all duration-300 bg-slate-600 hover:bg-slate-500';
+                    }
+                });
+            }
+
+            function goToSlide(index) {
+                if (index >= 0 && index < totalSlides) {
+                    currentSlide = index;
+                    updateUI();
+                }
+            }
+
+            function nextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    updateUI();
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateUI();
+                }
+            }
+
+            // Event Listeners
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'Space') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+
+            // Swipe support for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            document.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // Swipe Left (Next)
+                    nextSlide();
+                }
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    // Swipe Right (Prev)
+                    prevSlide();
+                }
+            }
+
+            // Initial UI setup
+            updateUI();
+        });
+    </script>
+</body>
+</html>
